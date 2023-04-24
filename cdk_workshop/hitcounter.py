@@ -1,15 +1,16 @@
 from constructs import Construct
-from aws_cdk import(
+from aws_cdk import (
     aws_lambda as _lambda,
     aws_dynamodb as ddb,
 )
 
 class HitCounter(Construct):
+
     @property
     def handler(self):
         return self._handler
 
-    def __init__(self, scope: Construct, id: str, downstream: _lambda.IFunction, **kwargs) -> None:
+    def __init__(self, scope: Construct, id: str, downstream: _lambda.IFunction, **kwargs):
         super().__init__(scope, id, **kwargs)
 
         table = ddb.Table(
@@ -18,9 +19,9 @@ class HitCounter(Construct):
         )
 
         self._handler = _lambda.Function(
-            self, 'HitCounterHandler',
+            self, 'HitCountHandler',
             runtime=_lambda.Runtime.PYTHON_3_7,
-            handler='hitcounter.handler',
+            handler='hitcount.handler',
             code=_lambda.Code.from_asset('lambda'),
             environment={
                 'DOWNSTREAM_FUNCTION_NAME': downstream.function_name,
